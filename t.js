@@ -147,10 +147,10 @@
 
         if (!playerVideoExists && element && !modalExists) {
             if (element.innerText === 'РќРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ') {
-                isCodeObtained = false;
+                isCodeObtained = true;
                 showModal();
             } else if (element.innerText === 'РЈ РІР°СЃ РµСЃС‚СЊ РџР Рћ') {
-                isCodeObtained = false;
+                isCodeObtained = true;
                 showHavePROModal();
             }
         }
@@ -722,17 +722,17 @@
     this.appendAPN = function(data) {
       if (Defined.api.indexOf('pwa') == 0 && Defined.apn.length && data.url && typeof data.url == 'string' && data.url.indexOf(Defined.apn) == -1) data.url_reserve = Defined.apn + data.url;
     };
-    this.setDefaultQuality = function(data) {
-      if (Lampa.Arrays.getKeys(data.quality).length) {
-        for (var q in data.quality) {
-          if (parseInt(q) == Lampa.Storage.field('video_quality_default')) {
-            data.url = data.quality[q];
-            this.appendAPN(data);
-            break;
-          }
-        }
+ this.setDefaultQuality = function(data) {
+  if (Lampa.Arrays.getKeys(data.quality).length) {
+    for (var q in data.quality) {
+      if (parseInt(q) >= 2160) { // Выбираем 4K, если доступно
+        data.url = data.quality[q];
+        this.appendAPN(data);
+        break;
       }
-    };
+    }
+  }
+};
     this.display = function(videos) {
       var _this5 = this;
       this.draw(videos, {
